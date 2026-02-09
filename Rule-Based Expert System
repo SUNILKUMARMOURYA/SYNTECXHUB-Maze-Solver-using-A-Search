@@ -1,0 +1,61 @@
+
+---
+
+# ✅ PROJECT 2: Rule-Based Expert System (Completed)
+
+### Features implemented
+- Rule base (IF–THEN rules)
+- Fact base (user symptoms)
+- Forward chaining inference
+- Multi-step reasoning
+- Inference trace logging
+
+---
+
+### 📁 Project Structure
+
+---
+
+### 🔹 `expert_system.py`
+```python
+class ExpertSystem:
+    def __init__(self):
+        self.facts = set()
+        self.rules = []
+        self.inference_log = []
+
+    def add_rule(self, conditions, conclusion):
+        self.rules.append((set(conditions), conclusion))
+
+    def add_fact(self, fact):
+        self.facts.add(fact)
+
+    def infer(self):
+        changed = True
+        while changed:
+            changed = False
+            for conditions, conclusion in self.rules:
+                if conditions.issubset(self.facts) and conclusion not in self.facts:
+                    self.facts.add(conclusion)
+                    self.inference_log.append(
+                        f"Because {conditions}, inferred {conclusion}"
+                    )
+                    changed = True
+
+    def show_log(self):
+        for step in self.inference_log:
+            print(step)
+
+
+if __name__ == "__main__":
+    system = ExpertSystem()
+
+    system.add_rule(["fever", "cough"], "flu")
+    system.add_rule(["flu"], "rest_needed")
+
+    system.add_fact("fever")
+    system.add_fact("cough")
+
+    system.infer()
+    system.show_log()
+    print("Final conclusions:", system.facts)
